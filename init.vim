@@ -163,10 +163,10 @@ nnoremap   <silent>   <F8>    :FloatermPrev<CR>
 tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
 nnoremap   <silent>   <F9>    :FloatermNext<CR>
 tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
-nnoremap   <silent>   <F10>   :FloatermToggle<CR>
-tnoremap   <silent>   <F10>   <C-\><C-n>:FloatermToggle<CR>
-nnoremap <silent> <C-x> :FloatermKill<CR>:FloatermPrev<CR>
-tnoremap <silent> <C-x> <C-\><C-n>:FloatermKill<CR>:FloatermPrev<CR>
+nnoremap   <silent>   <C-x>   :FloatermToggle<CR>
+tnoremap   <silent>   <C-x>   <C-\><C-n>:FloatermToggle<CR>
+nnoremap <silent> <C-k> :FloatermKill<CR>:FloatermPrev<CR>
+tnoremap <silent> <C-k> <C-\><C-n>:FloatermKill<CR>:FloatermPrev<CR>
 
 "" Git 
 nnoremap   <F10>    :FloatermNew --position=bottomleft --height=0.8 --width=0.6 --title='Git' lazygit<CR>
@@ -247,6 +247,11 @@ let g:NERDToggleCheckAllLines = 1
 let g:nerdtree_sync_cursorline = 1
 map <silent> <F5> :NERDTreeToggle<CR>
 
+" Start NERDTree. If a file is specified, move the cursor to its window.
+  autocmd StdinReadPre * let s:std_in=1
+  autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+
+
 " Open the existing NERDTree on each new tab.
 "autocmd BufWinEnter * silent NERDTreeMirror
 
@@ -306,7 +311,8 @@ let g:vista#renderer#icons = {
 
 " Disable automatic comment in newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
+ "" auto pairs
+ au FileType html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
 
 source ~/.config/nvim/coc.vim
 
