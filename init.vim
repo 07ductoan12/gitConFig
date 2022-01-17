@@ -1,8 +1,8 @@
-"setlocal list
-  "set mouse=a        " Enable mouse
+setlocal list
+  set mouse=a        " Enable mouse
   set tabstop=4         "
   set shiftwidth=4      "
-  "set listchars=tab:\¦\    " Tab charactor
+  set listchars=tab:\¦\    " Tab charactor
 
   set ignorecase        " Enable case-sensitive
   " Disable backup
@@ -37,8 +37,8 @@
   set nojoinspaces
 
   " Numbers
-  "set relativenumber
-  "set number
+  set relativenumber
+  set number
 
   " Open new split panes to right and bottom, which feels more natural
   set splitbelow
