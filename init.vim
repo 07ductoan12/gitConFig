@@ -109,6 +109,12 @@ call plug#begin('~/.config/nvim/plugged')
 " Source code version control 
 	Plug 'tpope/vim-fugitive' 		
 
+" format
+Plug 'prettier/vim-prettier', {
+\ 'do': 'yarn install --frozen-lockfile --production',
+\ 'branch': 'release/0.x'
+\ }
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin Setting
@@ -313,6 +319,16 @@ let g:vista#renderer#icons = {
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
  "" auto pairs
  au FileType html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
+
+" prettier
+"" when running at every change you may want to disable quickfix
+let g:prettier#quickfix_enabled = 0
+autocmd TextChanged,InsertLeave *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
+     
+" switch buffer
+nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
+
 
 source ~/.config/nvim/coc.vim
 
