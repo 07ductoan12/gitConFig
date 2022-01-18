@@ -103,7 +103,10 @@ setlocal list
   Plug 'prettier/vim-prettier', {
     \ 'do': 'yarn install --frozen-lockfile --production',
     \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
-
+    
+    "listtabs
+    Plug 'Yggdroot/indentLine'
+    
   call plug#end()
 
 
@@ -314,5 +317,8 @@ let g:prettier#autoformat_require_pragma = 0
   "switch buffer
   nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
   nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
+  
+  "indentLine
+  let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
   source ~/.config/nvim/coc.vim
