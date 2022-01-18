@@ -307,10 +307,9 @@ setlocal list
   au FileType html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
 
   " prettier
-  " when running at every change you may want to disable quickfix
-  let g:prettier#quickfix_enabled = 0
-
-  autocmd TextChanged,InsertLeave *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
+  nmap <Leader>pp <Plug>(Prettier)
+ let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
 
   "switch buffer
   nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
