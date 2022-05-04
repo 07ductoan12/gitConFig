@@ -1,8 +1,5 @@
-setlocal list
-  set mouse=a        " Enable mouse
-  set tabstop=4         "
-  set shiftwidth=4      "
-  set listchars=tab:\¦\    " Tab charactor
+  setlocal list
+    set listchars=tab:\¦\    " Tab charactor
 
   set ignorecase        " Enable case-sensitive
   " Disable backup
@@ -96,16 +93,10 @@ setlocal list
     Plug 'uiiaoo/java-syntax.vim'
 
   " Source code version control
-    Plug 'tpope/vim-fugitive'
-
-  " format
-  " post install (yarn install | npm install) then load plugin only for editing supported files
-  Plug 'prettier/vim-prettier', {
-    \ 'do': 'yarn install --frozen-lockfile --production',
-    \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
-    
-    "listtabs
-    "Plug 'Yggdroot/indentLine'
+   Plug 'tpope/vim-fugitive'
+    " Plug 'bfredl/nvim-ipy'
+ Plug 'jpalardy/vim-slime', { 'for': 'python' }
+  Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
     
   call plug#end()
 
@@ -115,7 +106,7 @@ setlocal list
   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   " Set theme
 
-  "colorscheme onedark
+  colorscheme onedark
    " Overwrite some color highlight
   if (has("autocmd"))
     augroup colorextend
@@ -133,8 +124,8 @@ setlocal list
 
   " Airline Setting
   let g:airline_powerline_fonts = 1               " Enable font for status bar
-  let g:airline_theme='gruvbox'                 " Theme OneDark
-
+  let g:airline_theme='onedark'                 " Theme OneDark
+  let g:airline_section_b = '%{strftime("%H:%M")}'
   let g:airline#extensions#tabline#enabled = 1        " Enable Tab bar
   let g:airline#extensions#tabline#left_sep = ' '       " Enable Tab seperator
   let g:airline#extensions#tabline#left_alt_sep = '|'     " Enable Tab seperator
@@ -242,8 +233,8 @@ setlocal list
   let g:NERDToggleCheckAllLines = 1
 
   " Start NERDTree. If a file is specified, move the cursor to its window.
-  autocmd StdinReadPre * let s:std_in=1
-  autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+  " autocmd StdinReadPre * let s:std_in=1
+  " autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 
   " NerdTree
   """ Hightlight current file
@@ -309,16 +300,104 @@ setlocal list
   "" auto pairs
   au FileType html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
 
-  " prettier
-  nmap <Leader>pp <Plug>(Prettier)
- let g:prettier#autoformat = 1
-let g:prettier#autoformat_require_pragma = 0
 
   "switch buffer
   nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
   nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
   
-  "indentLine
-  "let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+  command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+  vmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
 
-  source ~/.config/nvim/coc.vim
+"------------------------------------------------------------------------------
+" slime configuration 
+"------------------------------------------------------------------------------
+" always use tmux
+let g:slime_target = 'tmux'
+
+" fix paste issues in ipython
+let g:slime_python_ipython = 1
+
+" always send text to the top-right pane in the current tmux tab without asking
+let g:slime_default_config = {
+            \ 'socket_name': get(split($TMUX, ','), 0),
+            \ 'target_pane': '{top-right}' }
+let g:slime_dont_ask_default = 1
+
+"------------------------------------------------------------------------------
+" ipython-cell configuration
+"------------------------------------------------------------------------------
+" Keyboard mappings. <Leader> is \ (backslash) by default
+
+" map <Leader>s to start IPython
+nnoremap <Leader>s :SlimeSend1 python -m IPython --matplotlib qt<CR>
+
+" map <Leader>r to run script
+nnoremap <Leader>r :IPythonCellRun<CR>
+
+" map <Leader>R to run script and time the execution
+nnoremap <Leader>R :IPythonCellRunTime<CR>
+
+" map <Leader>c to execute the current cell
+nnoremap <Leader>c :IPythonCellExecuteCell<CR>
+
+" map <Leader>C to execute the current cell and jump to the next cell
+nnoremap <Leader>C :IPythonCellExecuteCellJump<CR>
+
+" map <Leader>l to clear IPython screen
+nnoremap <Leader>l :IPythonCellClear<CR>
+
+" map <Leader>x to close all Matplotlib figure windows
+nnoremap <Leader>x :IPythonCellClose<CR>
+
+" map [c and ]c to jump to the previous and next cell header
+nnoremap [c :IPythonCellPrevCell<CR>
+nnoremap ]c :IPythonCellNextCell<CR>
+
+" map <Leader>h to send the current line or current selection to IPython
+nmap <Leader>h <Plug>SlimeLineSend
+xmap <Leader>h <Plug>SlimeRegionSend
+
+" map <Leader>p to run the previous command
+nnoremap <Leader>p :IPythonCellPrevCommand<CR>
+
+" map <Leader>Q to restart ipython
+nnoremap <Leader>Q :IPythonCellRestart<CR>
+
+" map <Leader>d to start debug mode
+nnoremap <Leader>d :SlimeSend1 %debug<CR>
+
+" map <Leader>q to exit debug mode or IPython
+nnoremap <Leader>q :SlimeSend1 exit<CR>
+
+" map <F9> and <F10> to insert a cell header tag above/below and enter insert mode
+nmap <F9> :IPythonCellInsertAbove<CR>a
+nmap <F10> :IPythonCellInsertBelow<CR>a
+
+" also make <F9> and <F10> work in insert mode
+imap <F9> <C-o>:IPythonCellInsertAbove<CR>
+imap <F10> <C-o>:IPythonCellInsertBelow<CR>
+
+
+let g:ipython_cell_regex = 1
+let g:ipython_cell_tag = '# %%( [^[].*)?'
+
+let g:ipython_cell_cell_command = '%paste'
+
+
+set clipboard+=unnamedplus 
+let g:clipboard = {
+  \   'name': 'xclip-xfce4-clipman',
+  \   'copy': {
+  \      '+': 'xclip -selection clipboard',
+  \      '*': 'xclip -selection clipboard',
+  \    },
+  \   'paste': {
+  \      '+': 'xclip -selection clipboard -o',
+  \      '*': 'xclip -selection clipboard -o',
+  \   },
+  \   'cache_enabled': 1,
+  \ }
+
+let g:ipython_cell_update_file_variable = 1
+let g:ipython_cell_send_ctrl_c = 0
