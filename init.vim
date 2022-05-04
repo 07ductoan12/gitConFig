@@ -56,7 +56,8 @@
   call plug#begin('~/.config/nvim/plugged')
 
   " Theme
-    Plug 'joshdick/onedark.vim'           " grubox
+    "Plug 'joshdick/onedark.vim'           " grubox
+    Plug 'chriskempson/base16-vim'
 
 
   " File browser
@@ -106,14 +107,14 @@
   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   " Set theme
 
-  colorscheme onedark
+  colorscheme base16-isotope
    " Overwrite some color highlight
   if (has("autocmd"))
     augroup colorextend
       autocmd ColorScheme
-        \ * call onedark#extend_highlight("Comment",{"fg": {"gui": "#728083"}})
+        \ * call base16-default-dark#extend_highlight("Comment",{"fg": {"gui": "#728083"}})
       autocmd ColorScheme
-        \ * call onedark#extend_highlight("LineNr", {"fg": {"gui": "#728083"}})
+        \ * call base16-default-dark#extend_highlight("LineNr", {"fg": {"gui": "#728083"}})
     augroup END
   endif
 
@@ -124,7 +125,7 @@
 
   " Airline Setting
   let g:airline_powerline_fonts = 1               " Enable font for status bar
-  let g:airline_theme='onedark'                 " Theme OneDark
+  let g:airline_theme= 'base16_shapeshifter'                 " Theme OneDark
   let g:airline_section_b = '%{strftime("%H:%M")}'
   let g:airline#extensions#tabline#enabled = 1        " Enable Tab bar
   let g:airline#extensions#tabline#left_sep = ' '       " Enable Tab seperator
@@ -344,7 +345,7 @@ nnoremap <Leader>c :IPythonCellExecuteCell<CR>
 " map <Leader>C to execute the current cell and jump to the next cell
 nnoremap <Leader>C :IPythonCellExecuteCellJump<CR>
 
-" map <Leader>l to clear IPython screen
+" ap <Leader>l to clear IPython screen
 nnoremap <Leader>l :IPythonCellClear<CR>
 
 " map <Leader>x to close all Matplotlib figure windows
@@ -401,3 +402,5 @@ let g:clipboard = {
 
 let g:ipython_cell_update_file_variable = 1
 let g:ipython_cell_send_ctrl_c = 0
+let base16colorspace=256
+set termguicolors
