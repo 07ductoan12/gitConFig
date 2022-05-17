@@ -404,3 +404,8 @@ let g:ipython_cell_update_file_variable = 1
 let g:ipython_cell_send_ctrl_c = 0
 let base16colorspace=256
 set termguicolors
+" Use ctrl-[hjkl] to select the active split!
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
