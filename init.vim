@@ -83,10 +83,9 @@
     Plug 'alvan/vim-closetag'
     Plug 'mattn/emmet-vim'
     Plug 'preservim/nerdcommenter'          " Comment code
-    Plug 'liuchengxu/vista.vim'           " Function tag bar
     Plug 'alvan/vim-closetag'             " Auto close HTML/XML tag
-
-
+    Plug 'preservim/tagbar'
+    Plug 'majutsushi/tagbar'
   " Code syntax highlight
     Plug 'yuezk/vim-js'               " Javascript
     Plug 'MaxMEllon/vim-jsx-pretty'         " JSX/React
@@ -264,40 +263,6 @@
   nmap    <Leader>di <Plug>VimspectorStepInto
   nmap    <Leader>do <Plug>VimspectorStepOver
 
-  " vista vim
-  " Show the nearest function name in status bar
-  function! NearestMethodOrFunction() abort
-    return get(b:, 'vista_nearest_method_or_function', '')
-  endfunction
-  set statusline+=%{NearestMethodOrFunction()}
-
-  " By default vista.vim never run if you don't call it explicitly.
-  "
-  " If you want to show the nearest function in your statusline automatically,
-  " you can add the following line to your vimrc
-  autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-  " How each level is indented and what to prepend.
-  " This could make the display more compact or more spacious.
-  " e.g., more compact: ["▸ ", ""]
-  " Note: this option only works for the kind renderer, not the tree renderer.
-  let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-
-  " To enable fzf's preview window set g:vista_fzf_preview.
-  " The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
-  " For example:
-  let g:vista_fzf_preview = ['right:50%']
-
-  " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
-  let g:vista#renderer#enable_icon = 1
-
-  " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
-  let g:vista#renderer#icons = {
-  \   "function": "\uf794",
-  \   "variable": "\uf71b",
-  \  }
-
-
   "" auto pairs
   au FileType html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
 
@@ -404,8 +369,47 @@ let g:ipython_cell_update_file_variable = 1
 let g:ipython_cell_send_ctrl_c = 0
 let base16colorspace=256
 set termguicolors
+
 " Use ctrl-[hjkl] to select the active split!
 nmap <silent> <c-k> :wincmd k<CR>
 nmap <silent> <c-j> :wincmd j<CR>
 nmap <silent> <c-h> :wincmd h<CR>
 nmap <silent> <c-l> :wincmd l<CR>
+nmap <C-v> :TagbarToggle<CR>
+
+let g:airline#extensions#tagbar#flags = 'f'
+
+let g:tagbar_type_cpp = {
+            \ 'ctagstype' : 'c++',
+            \ 'kinds'     : [
+                \ 'd:macros:1:0',
+                \ 'p:prototypes:1:0',
+                \ 'g:enums',
+                \ 'e:enumerators:0:0',
+                \ 't:typedefs:0:0',
+                \ 'n:namespaces',
+                \ 'c:classes',
+                \ 's:structs',
+                \ 'u:unions',
+                \ 'f:functions',
+                \ 'm:members:0:0',
+                \ 'v:variables:0:0'
+            \ ],
+            \ 'sro'        : '::',
+            \ 'kind2scope' : {
+                \ 'g' : 'enum',
+                \ 'n' : 'namespace',
+                \ 'c' : 'class',
+                \ 's' : 'struct',
+                \ 'u' : 'union'
+            \ },
+            \ 'scope2kind' : {
+                \ 'enum'      : 'g',
+                \ 'namespace' : 'n',
+                \ 'class'     : 'c',
+                \ 'struct'    : 's',
+                \ 'union'     : 'u'
+            \ }
+        \ }
+
+ 
